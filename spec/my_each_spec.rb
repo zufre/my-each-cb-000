@@ -26,7 +26,15 @@ describe "my_each" do
     end
   end
 
+  it 'yields the correct element' do
+    words = ['hi', 'hello', 'bye', 'goodbye']
+    counter = 0
 
+    my_each(words) do |item|
+      expect(item).to equal(words[counter])
+      counter+=1
+    end
+  end
 
   it "can handle an empty collection" do
     empty_array = []
@@ -40,6 +48,15 @@ describe "my_each" do
     expect(saved_block).to_not raise_error
   end
 
+  it "returned array contains the same elements as the original collection" do
+    tas = ['arel', 'jon', 'logan', 'spencer']
+
+    # run the method
+    expect(my_each(tas) do |ta|
+    # Do nothing on yield
+    # check if it returns correct values
+    end).to contain_exactly('arel', 'jon', 'logan', 'spencer')
+  end
 
   it "does not modify the original collection" do
     tas = ['arel', 'jon', 'logan', 'spencer']
@@ -70,5 +87,14 @@ describe "my_each" do
     expect(times_called).to eq(expected)
   end
 
+  it "only passes a single element into the block at a time" do
 
+    tas = ['arel', 'jon', 'logan', 'spencer']
+
+    my_each(tas) do |ta|
+      # ta cannot be an array
+      expect(ta.kind_of?(Array)).to eq(false)
+      expect(ta.kind_of?(String)).to eq(true)
+    end
+  end
 end
